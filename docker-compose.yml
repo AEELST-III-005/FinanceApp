@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    container_name: finance_app-db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=finance_app
+    ports:
+      - "5432:5432"
+    networks:
+      - finance_app
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    image: finance_app-backend
+    container_name: finance_app-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/finance_app
+      - PYTHONPATH=/app/src
+    depends_on:
+      - db
+    networks:
+        - finance_app
+    working_dir: /app/src
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  frontend:
+    build: ./frontend
+    image: finance_app-frontend
+    container_name: finance_app-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - finance_app
+    environment:
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+
+volumes:
+  postgres_data:
+
+networks:
+  finance_app:
+    name: finance_app  # Isso força o nome da rede a ser EXATAMENTE este
+    driver: bridge
