@@ -1,0 +1,4 @@
+name: local
+variables:
+  - name: finance_app_backend
+    value: http://localhost:8000

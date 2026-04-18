@@ -1,0 +1,91 @@
+info:
+  name: Create Category
+  type: http
+  seq: 2
+  tags:
+    - categories
+
+http:
+  method: POST
+  url: "{{finance_app_backend}}/api/categories/"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "",
+        "icon": "",
+        "color": "",
+        "id": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Response
+    description: Successful Response
+    request:
+      url: "{{baseUrl}}/api/categories/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "",
+            "icon": "",
+            "color": "",
+            "id": ""
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "",
+            "icon": "",
+            "color": "",
+            "id": ""
+          }
+  - name: 422 Response
+    description: Validation Error
+    request:
+      url: "{{baseUrl}}/api/categories/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "",
+            "icon": "",
+            "color": "",
+            "id": ""
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": [
+              {
+                "loc": [],
+                "msg": "",
+                "type": "",
+                "input": "",
+                "ctx": {}
+              }
+            ]
+          }

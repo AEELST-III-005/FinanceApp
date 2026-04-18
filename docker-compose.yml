@@ -4,9 +4,9 @@ services:
     restart: always
     container_name: finance_app-db
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=finance_app
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
     networks:
@@ -23,7 +23,7 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/finance_app
+      - DATABASE_URL=${DATABASE_URL}
       - PYTHONPATH=/app/src
     depends_on:
       - db

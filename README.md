@@ -31,6 +31,7 @@ Para rodar o projeto localmente usando Docker siga os passos abaixo:
    - **Frontend:** [http://localhost:3000](http://localhost:3000)
    - **Backend (API):** [http://localhost:8000](http://localhost:8000)
    - **Documentação API (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
+   - **API Client (Bruno):** A coleção está na pasta `/bruno`
 
 4. **Ver logs:**
    ```bash
@@ -135,3 +136,14 @@ Se não quiseres instalar o `make`, podes correr os comandos do Docker Compose d
 | `make up` | `docker compose up -d` |
 | `make logs` | `docker compose logs -f` |
 | `make down` | `docker compose down` |
+
+## 🐶 API Client (Bruno)
+
+Este projeto utiliza o [API Client Bruno](https://www.usebruno.com/) como cliente de API Git-native.
+
+### Como usar:
+1. Instale o API Client Bruno no seu computador.
+2. Abra o API Client Bruno e selecione **"Open Collection"**.
+3. Navegue até a pasta raiz deste projeto e selecione a pasta `api-client`.
+4. No canto superior direito do Bruno, selecione o ambiente **"Local"** para que a `base_url` seja configurada corretamente para `http://localhost:8000`.
+5. Agora você pode testar os endpoints de categorias (`List`, `Create`, `Delete`).

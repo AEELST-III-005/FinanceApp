@@ -1,7 +1,23 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+import os
+from controllers.category_controller import router as category_router
+from config.database import engine, Base
+from exceptions.exception_handlers import register_exception_handlers
 
 app = FastAPI()
 
+# Create tables if they don't exist (when not running tests)
+if os.getenv("TESTING") != "True":
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"Error creating tables: {e}")
+
+register_exception_handlers(app)
+
+app.include_router(category_router)
+
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"FinanceApp": "Started"}
