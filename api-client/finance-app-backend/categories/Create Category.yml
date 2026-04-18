@@ -12,10 +12,9 @@ http:
     type: json
     data: |-
       {
-        "name": "",
-        "icon": "",
-        "color": "",
-        "id": ""
+        "name": "Alimentação",
+        "icon": "food",
+        "color": "red"  
       }
   auth: inherit
 

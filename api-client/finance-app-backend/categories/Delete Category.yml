@@ -7,11 +7,7 @@ info:
 
 http:
   method: DELETE
-  url: "{{finance_app_backend}}/api/categories/:id"
-  params:
-    - name: id
-      value: ""
-      type: path
+  url: "{{finance_app_backend}}/api/categories/c82e052f-4085-4290-ad05-5f46ac19852f"
   auth: inherit
 
 settings:
