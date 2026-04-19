@@ -1,7 +1,7 @@
-from sqlalchemy.orm import Session
-from repositories.category_repository import CategoryRepository
 from dtos.category import CategoryCreate
 from exceptions.business_exceptions import EntityNotFoundError
+from repositories.category_repository import CategoryRepository
+
 
 class CategoryService:
     def __init__(self, repository: CategoryRepository):

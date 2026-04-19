@@ -137,6 +137,41 @@ Se não quiseres instalar o `make`, podes correr os comandos do Docker Compose d
 | `make logs` | `docker compose logs -f` |
 | `make down` | `docker compose down` |
 
+## Desenvolvimento do Backend
+
+Se desejar contribuir ou rodar o backend fora do Docker para desenvolvimento:
+
+### 1. Ambiente Virtual e Dependências
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # No Windows: venv\Scripts\activate
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+### 2. Linting e Formatação (Ruff)
+O projeto utiliza o [Ruff](https://docs.astral.sh/ruff/) para garantir a qualidade do código.
+
+- **Verificar erros (Lint):**
+  ```bash
+  ruff check .
+  ```
+- **Corrigir erros automaticamente:**
+  ```bash
+  ruff check --fix .
+  ```
+- **Formatar código:**
+  ```bash
+  ruff format .
+  ```
+
+### 3. Pre-commit
+Para configurar os hooks que validam o código automaticamente antes de cada commit:
+```bash
+pre-commit install
+```
+
 ## 🐶 API Client (Bruno)
 
 Este projeto utiliza o [API Client Bruno](https://www.usebruno.com/) como cliente de API Git-native.

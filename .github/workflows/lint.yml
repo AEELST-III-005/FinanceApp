@@ -1,0 +1,24 @@
+name: Lint and Format
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements-dev.txt
+          
+      - name: Run Ruff Linter
+        run: ruff check --output-format=github backend
+          
+      - name: Run Ruff Formatter
+        run: ruff format --check backend
