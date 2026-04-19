@@ -1,6 +1,5 @@
-from sqlalchemy import Column, String
-
 from config.database import Base
+from sqlalchemy import Column, String
 
 
 class Category(Base):

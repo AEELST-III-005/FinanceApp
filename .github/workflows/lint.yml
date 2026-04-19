@@ -18,7 +18,7 @@ jobs:
           pip install -r backend/requirements-dev.txt
           
       - name: Run Ruff Linter
-        run: ruff check --output-format=github backend
+        run: ruff check --output-format=github --config backend/pyproject.toml backend
           
       - name: Run Ruff Formatter
-        run: ruff format --check backend
+        run: ruff format --check --config backend/pyproject.toml backend

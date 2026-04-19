@@ -1,12 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
-from sqlalchemy.orm import Session
-
 from config.database import get_db
 from dtos.category import CategoryCreate, CategoryDTO
+from fastapi import APIRouter, Depends, status
 from repositories.category_repository import CategoryRepository
 from services.category_service import CategoryService
+from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/api/categories", tags=["categories"])
 
