@@ -1,9 +1,11 @@
-from sqlalchemy.orm import Session
-from models.category import Category as CategoryModel
-from dtos.category import CategoryCreate
-from sqlalchemy.exc import IntegrityError
-from exceptions.business_exceptions import EntityAlreadyExistsError
 import uuid
+
+from dtos.category import CategoryCreate
+from exceptions.business_exceptions import EntityAlreadyExistsError
+from models.category import Category as CategoryModel
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
 
 class CategoryRepository:
     def __init__(self, db: Session):
@@ -14,7 +16,11 @@ class CategoryRepository:
 
     def create(self, category: CategoryCreate):
         # Check if category with same name already exists
-        existing_category = self.db.query(CategoryModel).filter(CategoryModel.name == category.name).first()
+        existing_category = (
+            self.db.query(CategoryModel)
+            .filter(CategoryModel.name == category.name)
+            .first()
+        )
         if existing_category:
             raise EntityAlreadyExistsError("Category with this name already exists")
 
@@ -22,7 +28,7 @@ class CategoryRepository:
             id=str(uuid.uuid4()),
             name=category.name,
             icon=category.icon,
-            color=category.color
+            color=category.color,
         )
         try:
             self.db.add(db_category)
@@ -34,7 +40,9 @@ class CategoryRepository:
             raise EntityAlreadyExistsError("Category with this name already exists")
 
     def delete(self, category_id: str):
-        db_category = self.db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
+        db_category = (
+            self.db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
+        )
         if db_category:
             self.db.delete(db_category)
             self.db.commit()

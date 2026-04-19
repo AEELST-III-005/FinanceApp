@@ -1,26 +1,26 @@
-import sys
 import os
+import sys
 
 # Adiciona o diretório src ao path para que os imports funcionem
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, StaticPool
-from sqlalchemy.orm import sessionmaker
 from config.database import Base, get_db
-from models.category import Category # Importar modelos para registro no Base
+from fastapi.testclient import TestClient
 from main import app
+from sqlalchemy import StaticPool, create_engine
+from sqlalchemy.orm import sessionmaker
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-SQLALCHEMY_DATABASE_URL = "sqlite://" # In-memory
+SQLALCHEMY_DATABASE_URL = "sqlite://"  # In-memory
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, 
+    SQLALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False},
     poolclass=StaticPool,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 @pytest.fixture(scope="function")
 def db():
@@ -34,6 +34,7 @@ def db():
         # Limpar o banco após cada teste para garantir isolamento
         Base.metadata.drop_all(bind=engine)
 
+
 @pytest.fixture(scope="function")
 def client(db):
     def override_get_db():
@@ -41,7 +42,7 @@ def client(db):
             yield db
         finally:
             pass
-    
+
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as c:
         yield c

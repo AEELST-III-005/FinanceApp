@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 import os
+
+from config.database import Base, engine
 from controllers.category_controller import router as category_router
-from config.database import engine, Base
 from exceptions.exception_handlers import register_exception_handlers
+from fastapi import FastAPI
 
 app = FastAPI()
 
@@ -17,6 +17,7 @@ if os.getenv("TESTING") != "True":
 register_exception_handlers(app)
 
 app.include_router(category_router)
+
 
 @app.get("/")
 def read_root():
