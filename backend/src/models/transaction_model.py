@@ -1,7 +1,6 @@
+from config.database import Base
 from sqlalchemy import Column, Date, ForeignKey, Numeric, String
 from sqlalchemy.orm import relationship
-
-from config.database import Base
 
 
 class Transaction(Base):

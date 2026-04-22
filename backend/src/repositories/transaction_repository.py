@@ -2,10 +2,9 @@ import uuid
 from datetime import date
 from typing import List, Optional
 
-from sqlalchemy.orm import Session
-
 from dtos.transaction_dto import TransactionCreate
 from models.transaction_model import Transaction
+from sqlalchemy.orm import Session
 
 
 class TransactionRepository:

@@ -151,25 +151,23 @@ pip install -r requirements-dev.txt
 ```
 
 ### 2. Linting e Formatação (Ruff)
-O projeto utiliza o [Ruff](https://docs.astral.sh/ruff/) para garantir a qualidade do código e a ordenação de importações.
-
-**Nota:** Certifique-se de estar dentro do diretório `backend` para que o Ruff utilize as configurações do arquivo `pyproject.toml`.
+O projeto utiliza o [Ruff](https://docs.astral.sh/ruff/) para garantir a qualidade do código e a ordenação de importações. Para garantir paridade com o GitHub Actions, recomenda-se executar os comandos a partir da raiz do projeto:
 
 - **Verificar erros (Lint):**
   ```bash
-  ruff check .
+  ruff check --config backend/pyproject.toml backend
   ```
 - **Corrigir erros automaticamente (incluindo ordenação de imports):**
   ```bash
-  ruff check --fix .
+  ruff check --fix --config backend/pyproject.toml backend
   ```
 - **Formatar código:**
   ```bash
-  ruff format .
+  ruff format --config backend/pyproject.toml backend
   ```
 
 > [!TIP]
-> Para garantir que o código passe no GitHub Actions, execute o `ruff check --fix .` seguido do `ruff format .` antes de realizar o commit.
+> Executar o `ruff check --fix` seguido do `ruff format` antes do commit evita falhas no CI.
 
 ### 3. Pre-commit
 Para configurar os hooks que validam o código automaticamente antes de cada commit:

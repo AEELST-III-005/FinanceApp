@@ -1,11 +1,10 @@
 import os
 
-from fastapi import FastAPI
-
 from config.database import Base, engine
 from controllers.category_controller import router as category_router
 from controllers.transaction_controller import router as transaction_router
 from exceptions.exception_handlers import register_exception_handlers
+from fastapi import FastAPI
 
 app = FastAPI()
 
