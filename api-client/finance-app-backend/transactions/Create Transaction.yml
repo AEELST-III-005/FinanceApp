@@ -1,0 +1,100 @@
+info:
+  name: Create Transaction
+  type: http
+  seq: 2
+  tags:
+    - transactions
+
+http:
+  method: POST
+  url: "{{finance_app_backend}}/api/transactions/"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Grocery Store",
+        "description": "Weekly groceries",
+        "amount": 1276.32,
+        "transaction_date": "2026-04-05",
+        "transaction_type": "expense",
+        "category_id": "58951e24-a7d3-49bd-94e2-17e8f22d39ac"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Response
+    description: Successful Response
+    request:
+      url: "{{baseUrl}}/api/transactions/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "description": "",
+            "amount": "",
+            "transaction_date": "",
+            "transaction_type": "",
+            "category_id": ""
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "description": "",
+            "amount": "",
+            "transaction_date": "",
+            "transaction_type": "",
+            "category_id": "",
+            "id": ""
+          }
+  - name: 422 Response
+    description: Validation Error
+    request:
+      url: "{{baseUrl}}/api/transactions/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "description": "",
+            "amount": "",
+            "transaction_date": "",
+            "transaction_type": "",
+            "category_id": ""
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": [
+              {
+                "loc": [],
+                "msg": "",
+                "type": "",
+                "input": "",
+                "ctx": {}
+              }
+            ]
+          }
