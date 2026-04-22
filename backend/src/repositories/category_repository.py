@@ -1,10 +1,11 @@
 import uuid
 
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
 from dtos.category import CategoryCreate
 from exceptions.business_exceptions import EntityAlreadyExistsError
 from models.category import Category as CategoryModel
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
 
 
 class CategoryRepository:

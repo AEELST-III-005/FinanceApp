@@ -5,11 +5,12 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
 import pytest
-from config.database import Base, get_db
 from fastapi.testclient import TestClient
-from main import app
 from sqlalchemy import StaticPool, create_engine
 from sqlalchemy.orm import sessionmaker
+
+from config.database import Base, get_db
+from main import app
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 SQLALCHEMY_DATABASE_URL = "sqlite://"  # In-memory

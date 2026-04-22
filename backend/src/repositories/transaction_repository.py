@@ -1,9 +1,12 @@
 import uuid
 from datetime import date
 from typing import List, Optional
+
 from sqlalchemy.orm import Session
-from models.transaction_model import Transaction
+
 from dtos.transaction_dto import TransactionCreate
+from models.transaction_model import Transaction
+
 
 class TransactionRepository:
     def __init__(self, db: Session):
@@ -14,10 +17,10 @@ class TransactionRepository:
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
         category_id: Optional[str] = None,
-        transaction_type: Optional[str] = None
+        transaction_type: Optional[str] = None,
     ) -> List[Transaction]:
         query = self.db.query(Transaction)
-        
+
         if start_date:
             query = query.filter(Transaction.transaction_date >= start_date)
         if end_date:
@@ -26,11 +29,13 @@ class TransactionRepository:
             query = query.filter(Transaction.category_id == category_id)
         if transaction_type:
             query = query.filter(Transaction.transaction_type == transaction_type)
-            
+
         return query.all()
 
     def get_by_id(self, transaction_id: str) -> Optional[Transaction]:
-        return self.db.query(Transaction).filter(Transaction.id == transaction_id).first()
+        return (
+            self.db.query(Transaction).filter(Transaction.id == transaction_id).first()
+        )
 
     def create(self, transaction_data: TransactionCreate) -> Transaction:
         db_transaction = Transaction(
@@ -40,25 +45,27 @@ class TransactionRepository:
             amount=transaction_data.amount,
             transaction_date=transaction_data.transaction_date,
             transaction_type=transaction_data.transaction_type,
-            category_id=transaction_data.category_id
+            category_id=transaction_data.category_id,
         )
         self.db.add(db_transaction)
         self.db.commit()
         self.db.refresh(db_transaction)
         return db_transaction
 
-    def update(self, transaction_id: str, transaction_data: TransactionCreate) -> Optional[Transaction]:
+    def update(
+        self, transaction_id: str, transaction_data: TransactionCreate
+    ) -> Optional[Transaction]:
         db_transaction = self.get_by_id(transaction_id)
         if not db_transaction:
             return None
-        
+
         db_transaction.title = transaction_data.title
         db_transaction.description = transaction_data.description
         db_transaction.amount = transaction_data.amount
         db_transaction.transaction_date = transaction_data.transaction_date
         db_transaction.transaction_type = transaction_data.transaction_type
         db_transaction.category_id = transaction_data.category_id
-        
+
         self.db.commit()
         self.db.refresh(db_transaction)
         return db_transaction
@@ -67,7 +74,7 @@ class TransactionRepository:
         db_transaction = self.get_by_id(transaction_id)
         if not db_transaction:
             return False
-        
+
         self.db.delete(db_transaction)
         self.db.commit()
         return True

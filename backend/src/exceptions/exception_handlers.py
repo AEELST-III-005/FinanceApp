@@ -1,6 +1,7 @@
-from exceptions.business_exceptions import EntityAlreadyExistsError, EntityNotFoundError
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+
+from exceptions.business_exceptions import EntityAlreadyExistsError, EntityNotFoundError
 
 
 async def entity_already_exists_handler(
