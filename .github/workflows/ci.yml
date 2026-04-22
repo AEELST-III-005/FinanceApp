@@ -42,4 +42,4 @@ jobs:
       - name: Run E2E Tests
         run: |
           cd backend
-          pytest tests/test_category_controller_e2e.py
+          pytest tests/
