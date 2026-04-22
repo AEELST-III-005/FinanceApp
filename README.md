@@ -151,13 +151,15 @@ pip install -r requirements-dev.txt
 ```
 
 ### 2. Linting e Formatação (Ruff)
-O projeto utiliza o [Ruff](https://docs.astral.sh/ruff/) para garantir a qualidade do código.
+O projeto utiliza o [Ruff](https://docs.astral.sh/ruff/) para garantir a qualidade do código e a ordenação de importações.
+
+**Nota:** Certifique-se de estar dentro do diretório `backend` para que o Ruff utilize as configurações do arquivo `pyproject.toml`.
 
 - **Verificar erros (Lint):**
   ```bash
   ruff check .
   ```
-- **Corrigir erros automaticamente:**
+- **Corrigir erros automaticamente (incluindo ordenação de imports):**
   ```bash
   ruff check --fix .
   ```
@@ -165,6 +167,9 @@ O projeto utiliza o [Ruff](https://docs.astral.sh/ruff/) para garantir a qualida
   ```bash
   ruff format .
   ```
+
+> [!TIP]
+> Para garantir que o código passe no GitHub Actions, execute o `ruff check --fix .` seguido do `ruff format .` antes de realizar o commit.
 
 ### 3. Pre-commit
 Para configurar os hooks que validam o código automaticamente antes de cada commit:
