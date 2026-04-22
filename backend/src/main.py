@@ -2,6 +2,7 @@ import os
 
 from config.database import Base, engine
 from controllers.category_controller import router as category_router
+from controllers.transaction_controller import router as transaction_router
 from exceptions.exception_handlers import register_exception_handlers
 from fastapi import FastAPI
 
@@ -17,6 +18,7 @@ if os.getenv("TESTING") != "True":
 register_exception_handlers(app)
 
 app.include_router(category_router)
+app.include_router(transaction_router)
 
 
 @app.get("/")

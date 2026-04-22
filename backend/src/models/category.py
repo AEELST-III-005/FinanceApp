@@ -1,5 +1,6 @@
 from config.database import Base
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 
 class Category(Base):
@@ -9,3 +10,5 @@ class Category(Base):
     name = Column(String, unique=True, index=True)
     icon = Column(String)
     color = Column(String)
+
+    transactions = relationship("Transaction", back_populates="category")
