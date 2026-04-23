@@ -1,0 +1,144 @@
+info:
+  name: Get Dashboard Data
+  type: http
+  seq: 1
+  tags:
+    - Dashboard
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/dashboard/"
+  params:
+    - name: period
+      value: current_month
+      type: query
+      disabled: true
+    - name: period
+      value: last_month
+      type: query
+      disabled: true
+    - name: period
+      value: last_6_months
+      type: query
+      disabled: true
+    - name: period
+      value: current_year
+      type: query
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: Successful Response
+    request:
+      url: "{{baseUrl}}/api/dashboard/"
+      method: GET
+      params:
+        - name: period
+          value: current_month
+          type: query
+          disabled: true
+        - name: period
+          value: last_month
+          type: query
+          disabled: true
+        - name: period
+          value: last_6_months
+          type: query
+          disabled: true
+        - name: period
+          value: current_year
+          type: query
+          disabled: true
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "summary": {
+              "total_incomes": "",
+              "total_expenses": "",
+              "current_balance": "",
+              "period_expenses": ""
+            },
+            "monthly_history": [
+              {
+                "month": "",
+                "incomes": "",
+                "expenses": ""
+              }
+            ],
+            "expenses_by_category": [
+              {
+                "category_name": "",
+                "total_amount": "",
+                "color": "",
+                "icon": ""
+              }
+            ],
+            "recent_transactions": [
+              {
+                "id": "",
+                "title": "",
+                "amount": "",
+                "transaction_date": "",
+                "transaction_type": "",
+                "category_name": "",
+                "category_color": "",
+                "category_icon": ""
+              }
+            ]
+          }
+  - name: 422 Response
+    description: Validation Error
+    request:
+      url: "{{baseUrl}}/api/dashboard/"
+      method: GET
+      params:
+        - name: period
+          value: current_month
+          type: query
+          disabled: true
+        - name: period
+          value: last_month
+          type: query
+          disabled: true
+        - name: period
+          value: last_6_months
+          type: query
+          disabled: true
+        - name: period
+          value: current_year
+          type: query
+          disabled: true
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": [
+              {
+                "loc": [],
+                "msg": "",
+                "type": "",
+                "input": "",
+                "ctx": {}
+              }
+            ]
+          }

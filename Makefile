@@ -1,4 +1,4 @@
-.PHONY: build up down logs test-backend test-frontend
+.PHONY: build up down logs test-backend test-frontend lint format
 
 build:
 	docker compose build
@@ -17,3 +17,10 @@ test-backend:
 
 test-frontend:
 	docker compose exec frontend npm test
+
+lint:
+	ruff check --config backend/pyproject.toml backend
+
+format:
+	ruff check --fix --config backend/pyproject.toml backend
+	ruff format --config backend/pyproject.toml backend
