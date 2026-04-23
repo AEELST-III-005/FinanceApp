@@ -331,6 +331,48 @@
         }
       }
     },
+    "/api/dashboard/": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Dashboard Data",
+        "operationId": "get_dashboard_data_api_dashboard__get",
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/DashboardPeriod",
+              "default": "current_month"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Read Root",
@@ -401,6 +443,125 @@
         ],
         "title": "CategoryDTO"
       },
+      "CategorySummary": {
+        "properties": {
+          "category_name": {
+            "type": "string",
+            "title": "Category Name"
+          },
+          "total_amount": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Amount"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Icon"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category_name",
+          "total_amount"
+        ],
+        "title": "CategorySummary"
+      },
+      "DashboardPeriod": {
+        "type": "string",
+        "enum": [
+          "current_month",
+          "last_month",
+          "last_6_months",
+          "current_year"
+        ],
+        "title": "DashboardPeriod"
+      },
+      "DashboardResponse": {
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/DashboardSummary"
+          },
+          "monthly_history": {
+            "items": {
+              "$ref": "#/components/schemas/MonthlyHistory"
+            },
+            "type": "array",
+            "title": "Monthly History"
+          },
+          "expenses_by_category": {
+            "items": {
+              "$ref": "#/components/schemas/CategorySummary"
+            },
+            "type": "array",
+            "title": "Expenses By Category"
+          },
+          "recent_transactions": {
+            "items": {
+              "$ref": "#/components/schemas/RecentTransaction"
+            },
+            "type": "array",
+            "title": "Recent Transactions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "summary",
+          "monthly_history",
+          "expenses_by_category",
+          "recent_transactions"
+        ],
+        "title": "DashboardResponse"
+      },
+      "DashboardSummary": {
+        "properties": {
+          "total_incomes": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Incomes"
+          },
+          "total_expenses": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Expenses"
+          },
+          "current_balance": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Current Balance"
+          },
+          "period_expenses": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Period Expenses"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_incomes",
+          "total_expenses",
+          "current_balance",
+          "period_expenses"
+        ],
+        "title": "DashboardSummary"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -413,6 +574,93 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "MonthlyHistory": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month"
+          },
+          "incomes": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Incomes"
+          },
+          "expenses": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Expenses"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "incomes",
+          "expenses"
+        ],
+        "title": "MonthlyHistory"
+      },
+      "RecentTransaction": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Amount"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Transaction Date"
+          },
+          "transaction_type": {
+            "type": "string",
+            "title": "Transaction Type"
+          },
+          "category_name": {
+            "type": "string",
+            "title": "Category Name"
+          },
+          "category_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category Color"
+          },
+          "category_icon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category Icon"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "amount",
+          "transaction_date",
+          "transaction_type",
+          "category_name"
+        ],
+        "title": "RecentTransaction"
       },
       "TransactionCreate": {
         "properties": {
