@@ -1,5 +1,5 @@
-import pytest
 from fastapi.testclient import TestClient
+
 
 def test_get_dashboard_data_success(client: TestClient):
     """
@@ -14,9 +14,9 @@ def test_get_dashboard_data_success(client: TestClient):
 
     # Assert
     assert response.status_code == 200
-    
+
     data = response.json()
-    
+
     # Assert schema for summary
     assert "summary" in data
     summary = data["summary"]
@@ -24,7 +24,7 @@ def test_get_dashboard_data_success(client: TestClient):
     assert "total_expenses" in summary
     assert "current_balance" in summary
     assert "period_expenses" in summary
-    
+
     # Assert schema for monthly_history
     assert "monthly_history" in data
     assert isinstance(data["monthly_history"], list)
@@ -33,7 +33,7 @@ def test_get_dashboard_data_success(client: TestClient):
         assert "month" in history_item
         assert "incomes" in history_item
         assert "expenses" in history_item
-        
+
     # Assert schema for expenses_by_category
     assert "expenses_by_category" in data
     assert isinstance(data["expenses_by_category"], list)
@@ -44,7 +44,7 @@ def test_get_dashboard_data_success(client: TestClient):
         # color and icon are optional but let's check they exist in our stub
         assert "color" in category_item
         assert "icon" in category_item
-        
+
     # Assert schema for recent_transactions
     assert "recent_transactions" in data
     assert isinstance(data["recent_transactions"], list)
@@ -56,6 +56,7 @@ def test_get_dashboard_data_success(client: TestClient):
         assert "transaction_date" in transaction
         assert "transaction_type" in transaction
         assert "category_name" in transaction
+
 
 def test_get_dashboard_data_with_period(client: TestClient):
     """

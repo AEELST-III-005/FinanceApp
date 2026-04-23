@@ -1,4 +1,5 @@
 import os
+
 from config.settings import settings
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -17,6 +18,7 @@ def create_tables():
     if os.getenv("TESTING") != "True":
         from models.category import Category  # noqa: F401
         from models.transaction_model import Transaction  # noqa: F401
+
         try:
             Base.metadata.create_all(bind=engine)
         except Exception as e:
