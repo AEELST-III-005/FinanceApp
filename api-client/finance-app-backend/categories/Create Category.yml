@@ -12,10 +12,11 @@ http:
     type: json
     data: |-
       {
-        "name": "Alimentação",
-        "icon": "food",
-        "color": "red"  
-      }
+          "name": "Mercado",
+          "icon": "🍔",
+          "color": "#5C62F9",
+          "id": "c7648148-4b69-4d12-bbaa-57882631a92f"
+        },
   auth: inherit
 
 settings:

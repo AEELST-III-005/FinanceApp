@@ -1,7 +1,7 @@
 from typing import List
 
 from config.database import get_db
-from dtos.category import CategoryCreate, CategoryDTO
+from dtos.category import CategoryCreate, CategoryDTO, CategoryUpdate
 from fastapi import APIRouter, Depends, status
 from repositories.category_repository import CategoryRepository
 from services.category_service import CategoryService
@@ -25,6 +25,15 @@ def create_category(
     category: CategoryCreate, service: CategoryService = Depends(get_category_service)
 ):
     return service.create_category(category)
+
+
+@router.put("/{id}", response_model=CategoryDTO)
+def update_category(
+    id: str,
+    category: CategoryUpdate,
+    service: CategoryService = Depends(get_category_service),
+):
+    return service.update_category(id, category)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
