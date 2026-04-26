@@ -1,4 +1,5 @@
 import { LayoutDashboard, Receipt, PlusCircle, Tags, CreditCard } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 export default function Sidebar() {
   return (
@@ -9,27 +10,27 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex flex-col gap-2">
-        <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" />
-        <NavItem icon={<Receipt size={20} />} label="Lancamentos" />
-        <NavItem icon={<PlusCircle size={20} />} label="Novo Lancamento" />
-        <NavItem icon={<Tags size={20} />} label="Categorias" active />
+        <NavItem to="/" icon={<LayoutDashboard size={20} />} label="Dashboard" />
+        <NavItem to="/releases" icon={<Receipt size={20} />} label="Lançamentos" />
+        <NavItem to="/new-release" icon={<PlusCircle size={20} />} label="Novo Lançamento" />
+        <NavItem to="/categories" icon={<Tags size={20} />} label="Categorias" />
       </nav>
     </aside>
   );
 }
 
-function NavItem({ icon, label, active }) {
+function NavItem({ to, icon, label }) {
   return (
-    <a
-      href="#"
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-        active
+    <NavLink
+      to={to}
+      className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+        isActive
           ? 'bg-[#2a2f4c] text-blue-400'
           : 'text-gray-400 hover:text-white hover:bg-[#1a2133]'
       }`}
     >
       {icon}
       <span className="font-medium text-sm">{label}</span>
-    </a>
+    </NavLink>
   );
 }
