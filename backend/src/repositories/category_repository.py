@@ -48,3 +48,22 @@ class CategoryRepository:
             self.db.commit()
             return True
         return False
+
+    def update(self, category_id: str, category: CategoryCreate):
+        db_category = (
+            self.db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
+        )
+        if not db_category:
+            return None
+
+        db_category.name = category.name
+        db_category.icon = category.icon
+        db_category.color = category.color
+
+        try:
+            self.db.commit()
+            self.db.refresh(db_category)
+            return db_category
+        except IntegrityError:
+            self.db.rollback()
+            raise EntityAlreadyExistsError("Category with this name already exists")

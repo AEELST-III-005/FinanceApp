@@ -1,4 +1,4 @@
-from dtos.category import CategoryCreate
+from dtos.category import CategoryCreate, CategoryUpdate
 from exceptions.business_exceptions import EntityNotFoundError
 from repositories.category_repository import CategoryRepository
 
@@ -18,3 +18,9 @@ class CategoryService:
         if not success:
             raise EntityNotFoundError("Category not found")
         return True
+
+    def update_category(self, category_id: str, category: CategoryUpdate):
+        updated_category = self.repository.update(category_id, category)
+        if not updated_category:
+            raise EntityNotFoundError("Category not found")
+        return updated_category
