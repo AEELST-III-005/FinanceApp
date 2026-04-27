@@ -1,9 +1,12 @@
 import uuid
 from datetime import date
-from typing import List, Optional
+from decimal import Decimal
+from typing import List, Optional, Tuple
 
 from dtos.transaction_dto import TransactionCreate
+from models.category import Category
 from models.transaction_model import Transaction
+from sqlalchemy import case, extract, func
 from sqlalchemy.orm import Session, joinedload
 
 
@@ -80,3 +83,73 @@ class TransactionRepository:
         self.db.delete(db_transaction)
         self.db.commit()
         return True
+
+    def get_total_by_type(self, transaction_type: str) -> Decimal:
+        return self.db.query(func.sum(Transaction.amount)).filter(
+            Transaction.transaction_type == transaction_type
+        ).scalar() or Decimal("0")
+
+    def get_period_expenses(self, start_date: date, end_date: date) -> Decimal:
+        return self.db.query(func.sum(Transaction.amount)).filter(
+            Transaction.transaction_type == "expense",
+            Transaction.transaction_date >= start_date,
+            Transaction.transaction_date <= end_date,
+        ).scalar() or Decimal("0")
+
+    def get_monthly_history(
+        self, start_date: date
+    ) -> List[Tuple[int, int, Decimal, Decimal]]:
+        return (
+            self.db.query(
+                extract("year", Transaction.transaction_date).label("year"),
+                extract("month", Transaction.transaction_date).label("month"),
+                func.sum(
+                    case(
+                        (Transaction.transaction_type == "income", Transaction.amount),
+                        else_=0,
+                    )
+                ).label("incomes"),
+                func.sum(
+                    case(
+                        (Transaction.transaction_type == "expense", Transaction.amount),
+                        else_=0,
+                    )
+                ).label("expenses"),
+            )
+            .filter(Transaction.transaction_date >= start_date)
+            .group_by(
+                extract("year", Transaction.transaction_date),
+                extract("month", Transaction.transaction_date),
+            )
+            .all()
+        )
+
+    def get_expenses_by_category(
+        self, start_date: date, end_date: date
+    ) -> List[Tuple[str, str, str, Decimal]]:
+        return (
+            self.db.query(
+                Category.name,
+                Category.color,
+                Category.icon,
+                func.sum(Transaction.amount).label("total_amount"),
+            )
+            .join(Transaction, Transaction.category_id == Category.id)
+            .filter(
+                Transaction.transaction_type == "expense",
+                Transaction.transaction_date >= start_date,
+                Transaction.transaction_date <= end_date,
+            )
+            .group_by(Category.id)
+            .order_by(func.sum(Transaction.amount).desc())
+            .all()
+        )
+
+    def get_recent_transactions(self, limit: int = 10) -> List[Transaction]:
+        return (
+            self.db.query(Transaction)
+            .options(joinedload(Transaction.category))
+            .order_by(Transaction.transaction_date.desc(), Transaction.id.desc())
+            .limit(limit)
+            .all()
+        )

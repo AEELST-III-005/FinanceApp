@@ -10,8 +10,8 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex flex-col gap-2">
-        <NavItem to="/" icon={<LayoutDashboard size={20} />} label="Dashboard" />
-        <NavItem to="/transactions" icon={<Receipt size={20} />} label="Lançamentos" />
+        <NavItem to="/" icon={<LayoutDashboard size={20} />} label="Dashboard" end />
+        <NavItem to="/transactions" icon={<Receipt size={20} />} label="Lançamentos" end />
         <NavItem to="/transactions/new" icon={<PlusCircle size={20} />} label="Novo Lançamento" />
         <NavItem to="/categories" icon={<Tags size={20} />} label="Categorias" />
       </nav>
@@ -19,10 +19,11 @@ export default function Sidebar() {
   );
 }
 
-function NavItem({ to, icon, label }) {
+function NavItem({ to, icon, label, end }) {
   return (
     <NavLink
       to={to}
+      end={end}
       className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
         isActive
           ? 'bg-[#2a2f4c] text-blue-400'

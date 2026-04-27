@@ -1,16 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 import { Check, HandCoins, Leaf } from 'lucide-react';
 import { getCategories } from '../../services/categoriesService';
 import 'react-datepicker/dist/react-datepicker.css';
 
+const getLocalTodayString = () => {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const INITIAL_FORM = {
   title: '',
   amount: '',
-  transactionDate: new Date().toISOString().split('T')[0],
+  transactionDate: getLocalTodayString(),
   transactionType: 'expense',
   categoryId: '',
   description: '',
+};
+
+const parseLocalDate = (dateStr) => {
+  if (!dateStr) return null;
+  return new Date(dateStr.includes('T') ? dateStr : `${dateStr}T00:00:00`);
 };
 
 export default function TransactionForm({ editingTransaction, isSubmitting, onSave, onCancelEdit }) {
@@ -23,7 +36,7 @@ export default function TransactionForm({ editingTransaction, isSubmitting, onSa
 
   useEffect(() => {
     if (!editingTransaction) {
-      setForm(INITIAL_FORM);
+      setForm({ ...INITIAL_FORM, transactionDate: getLocalTodayString() });
       setErrors({});
       return;
     }
@@ -31,7 +44,7 @@ export default function TransactionForm({ editingTransaction, isSubmitting, onSa
     setForm({
       title: editingTransaction.title || '',
       amount: String(editingTransaction.amount ?? ''),
-      transactionDate: editingTransaction.transactionDate || new Date().toISOString().split('T')[0],
+      transactionDate: editingTransaction.transactionDate || getLocalTodayString(),
       transactionType: editingTransaction.transactionType || 'expense',
       categoryId: editingTransaction.categoryId || '',
       description: editingTransaction.description || '',
@@ -61,9 +74,8 @@ export default function TransactionForm({ editingTransaction, isSubmitting, onSa
     const nextErrors = {};
 
     if (!form.title.trim()) nextErrors.title = 'Descricao obrigatoria.';
-    if (!form.description.trim()) nextErrors.description = 'Observacoes obrigatorias.';
     if (!Number(form.amount) || Number(form.amount) <= 0) nextErrors.amount = 'Valor deve ser maior que zero.';
-    if (!form.transactionDate || Number.isNaN(new Date(form.transactionDate).getTime())) {
+    if (!form.transactionDate || Number.isNaN(parseLocalDate(form.transactionDate).getTime())) {
       nextErrors.transactionDate = 'Data invalida.';
     }
     if (!form.categoryId) nextErrors.categoryId = 'Categoria obrigatoria.';
@@ -87,12 +99,15 @@ export default function TransactionForm({ editingTransaction, isSubmitting, onSa
       });
 
       if (!isEditMode) {
-        setForm(INITIAL_FORM);
+        setForm({ ...INITIAL_FORM, transactionDate: getLocalTodayString() });
       }
     } catch {
       // Parent page handles API errors.
     }
   };
+
+  const debounceRef = useRef(null);
+  const selectedDate = useMemo(() => parseLocalDate(form.transactionDate), [form.transactionDate]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -133,13 +148,29 @@ export default function TransactionForm({ editingTransaction, isSubmitting, onSa
       <div>
         <label className="mb-1 block text-sm text-gray-300">Data *</label>
         <DatePicker
-          selected={form.transactionDate ? new Date(form.transactionDate) : null}
-          onChange={(date) =>
-            setField(
-              'transactionDate',
-              date ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('T')[0] : ''
-            )
-          }
+          selected={selectedDate}
+          onChange={(date, event) => {
+            if (debounceRef.current) clearTimeout(debounceRef.current);
+            
+            if (!date) {
+              setField('transactionDate', '');
+              return;
+            }
+
+            const processDate = () => {
+              if (Number.isNaN(date.getTime())) return;
+              const year = date.getFullYear();
+              const month = String(date.getMonth() + 1).padStart(2, '0');
+              const day = String(date.getDate()).padStart(2, '0');
+              setField('transactionDate', `${year}-${month}-${day}`);
+            };
+
+            if (event && event.type === 'change') {
+              debounceRef.current = setTimeout(processDate, 400);
+            } else {
+              processDate();
+            }
+          }}
           dateFormat="dd/MM/yyyy"
           placeholderText="Selecione uma data"
           className="w-full rounded-md border border-gray-700 bg-[#0b0f19] px-3 py-2 text-sm text-white outline-none focus:border-blue-400"
