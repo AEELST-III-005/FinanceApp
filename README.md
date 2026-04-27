@@ -2,6 +2,12 @@
 
 **Projeto Integrador III - UNIVESP (Turma 005 - 2026S1)**
 
+
+https://github.com/user-attachments/assets/91365115-428f-4fef-b088-3659a86d583a
+
+https://github.com/user-attachments/assets/6c19cb1b-ee11-4ece-ae23-ced2b093bf45
+
+
 ## Sobre o Projeto
 O **FinanceApp** é um sistema de controlo de gastos pessoais desenvolvido para solucionar a dificuldade de gestão financeira individual. O foco do projeto é transformar registos brutos de receitas e despesas em informações visuais acionáveis, permitindo que o utilizador identifique padrões de consumo através de dashboards e gráficos interativos.
 
