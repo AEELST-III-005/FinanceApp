@@ -11,8 +11,8 @@ export default function Sidebar() {
 
       <nav className="flex flex-col gap-2">
         <NavItem to="/" icon={<LayoutDashboard size={20} />} label="Dashboard" />
-        <NavItem to="/releases" icon={<Receipt size={20} />} label="Lançamentos" />
-        <NavItem to="/new-release" icon={<PlusCircle size={20} />} label="Novo Lançamento" />
+        <NavItem to="/transactions" icon={<Receipt size={20} />} label="Lançamentos" />
+        <NavItem to="/transactions/new" icon={<PlusCircle size={20} />} label="Novo Lançamento" />
         <NavItem to="/categories" icon={<Tags size={20} />} label="Categorias" />
       </nav>
     </aside>

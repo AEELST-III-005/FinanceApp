@@ -40,6 +40,21 @@ export async function getTransactions() {
   return Array.isArray(data) ? data.map(mapToClient) : [];
 }
 
+export async function getTransactionsWithFilters(filters = {}) {
+  const query = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '' && value !== 'all') {
+      query.append(key, value);
+    }
+  });
+
+  const url = query.toString() ? `${TRANSACTIONS_ENDPOINT}?${query.toString()}` : TRANSACTIONS_ENDPOINT;
+  const response = await fetch(url);
+  const data = await handleResponse(response);
+  return Array.isArray(data) ? data.map(mapToClient) : [];
+}
+
 export async function createTransaction(payload) {
   const response = await fetch(TRANSACTIONS_ENDPOINT, {
     method: 'POST',
