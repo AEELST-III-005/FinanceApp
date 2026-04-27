@@ -88,21 +88,31 @@ class DashboardService:
         ).group_by(
             extract('year', Transaction.transaction_date),
             extract('month', Transaction.transaction_date)
-        ).order_by(
-            extract('year', Transaction.transaction_date),
-            extract('month', Transaction.transaction_date)
         ).all()
 
+        # Create a map for easy lookup
+        stats_map = {(int(s.year), int(s.month)): s for s in monthly_stats}
+        
         monthly_history = []
-        for stat in monthly_stats:
-            month_str = f"{int(stat.month):02d}/{int(stat.year)}"
+        for i in range(5, -1, -1):
+            # Calculate year and month for each of the last 6 months
+            m = today.month - i
+            y = today.year
+            while m <= 0:
+                m += 12
+                y -= 1
+            
+            month_str = f"{m:02d}/{y}"
+            stat = stats_map.get((y, m))
+            
             monthly_history.append(
                 MonthlyHistory(
                     month=month_str,
-                    incomes=Decimal(str(stat.incomes or 0)),
-                    expenses=Decimal(str(stat.expenses or 0))
+                    incomes=Decimal(str(stat.incomes or 0)) if stat else Decimal('0'),
+                    expenses=Decimal(str(stat.expenses or 0)) if stat else Decimal('0')
                 )
             )
+
 
         # 3. Expenses by Category (for the current period)
         category_stats = db.query(
