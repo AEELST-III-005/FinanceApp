@@ -4,8 +4,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from backend.src.dtos.dashboard_dto import DashboardPeriod
-from backend.src.services.dashboard_service import DashboardService
+from dtos.dashboard_dto import DashboardPeriod
+from services.dashboard_service import DashboardService
 
 
 @pytest.fixture
@@ -57,7 +57,7 @@ def test_get_dashboard_summary_refactored(
     mock_transaction_repository.get_recent_transactions.return_value = [mock_tx]
 
     # Act
-    with patch("backend.src.services.dashboard_service.date") as mock_date:
+    with patch("services.dashboard_service.date") as mock_date:
         mock_date.today.return_value = date(2026, 4, 27)
         mock_date.side_effect = lambda *args, **kw: date(*args, **kw)
 
