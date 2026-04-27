@@ -61,7 +61,6 @@ export default function TransactionForm({ editingTransaction, isSubmitting, onSa
     const nextErrors = {};
 
     if (!form.title.trim()) nextErrors.title = 'Descricao obrigatoria.';
-    if (!form.description.trim()) nextErrors.description = 'Observacoes obrigatorias.';
     if (!Number(form.amount) || Number(form.amount) <= 0) nextErrors.amount = 'Valor deve ser maior que zero.';
     if (!form.transactionDate || Number.isNaN(new Date(form.transactionDate).getTime())) {
       nextErrors.transactionDate = 'Data invalida.';
