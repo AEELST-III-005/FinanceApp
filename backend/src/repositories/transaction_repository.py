@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from dtos.transaction_dto import TransactionCreate
 from models.transaction_model import Transaction
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 
 class TransactionRepository:
@@ -18,7 +18,7 @@ class TransactionRepository:
         category_id: Optional[str] = None,
         transaction_type: Optional[str] = None,
     ) -> List[Transaction]:
-        query = self.db.query(Transaction)
+        query = self.db.query(Transaction).options(joinedload(Transaction.category))
 
         if start_date:
             query = query.filter(Transaction.transaction_date >= start_date)
@@ -33,7 +33,10 @@ class TransactionRepository:
 
     def get_by_id(self, transaction_id: str) -> Optional[Transaction]:
         return (
-            self.db.query(Transaction).filter(Transaction.id == transaction_id).first()
+            self.db.query(Transaction)
+            .options(joinedload(Transaction.category))
+            .filter(Transaction.id == transaction_id)
+            .first()
         )
 
     def create(self, transaction_data: TransactionCreate) -> Transaction:
