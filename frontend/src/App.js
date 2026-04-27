@@ -4,6 +4,7 @@ import DashboardPage from './pages/DashboardPage';
 import ReleasesPage from './pages/ReleasesPage';
 import NewReleasePage from './pages/NewReleasePage';
 import CategoriesPage from './pages/CategoriesPage';
+import TransactionsPage from './pages/TransactionsPage';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/releases" element={<ReleasesPage />} />
             <Route path="/new-release" element={<NewReleasePage />} />
+            <Route path="/transactions" element={<TransactionsPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
