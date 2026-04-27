@@ -3,7 +3,6 @@ from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from dtos.dashboard_dto import DashboardPeriod
 from services.dashboard_service import DashboardService
 
