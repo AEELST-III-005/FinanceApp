@@ -30,4 +30,5 @@ class TransactionDTO(TransactionBase):
 
     class Config:
         from_attributes = True
-        # We need to allow the category object to be populated from the model relationship
+        # We need to allow the category object to be populated
+        # from the model relationship
