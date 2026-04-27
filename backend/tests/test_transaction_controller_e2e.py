@@ -64,6 +64,8 @@ def test_get_transactions(client):
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 2
+    assert data[0]["category_name"] == "Food"
+    assert data[1]["category_name"] == "Food"
 
 
 def test_get_transactions_with_filters(client):
