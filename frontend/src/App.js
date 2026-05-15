@@ -1,5 +1,6 @@
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import Sidebar from './Sidebar';
+import VLibras from './components/VLibras';
 import DashboardPage from './pages/DashboardPage';
 import ReleasesPage from './pages/ReleasesPage';
 import CategoriesPage from './pages/CategoriesPage';
@@ -10,6 +11,7 @@ export default function App() {
     return (<BrowserRouter>
             <div className="flex min-h-screen bg-[#0b0f19] text-white font-sans">
                 <Sidebar/>
+                <VLibras/>
 
                 <main className="flex-1 p-8">
                     <Routes>
